@@ -25,7 +25,33 @@ import org.dom4j.io.SAXReader;
  */
 public class MessageUtil {
 
+	//文本消息类型
 	public static final String MESSAGE_TEXT = "text";
+
+	public static final String MESSAGE_NEWS = "news";
+	//图片消息
+	public static final String MESSAGE_IMAGE = "image";
+	//语音消息
+	public static final String MESSAGE_VOICE = "voice";
+	//英语消息
+	public static final String MESSAGE_MUSIC = "music";
+	//视频消息
+	public static final String MESSAGE_VIDEO = "video";
+	//链接消息
+	public static final String MESSAGE_LINK = "link";
+	//地理位置消息
+	public static final String MESSAGE_LOCATION = "location";
+	//事件推送
+	public static final String MESSAGE_EVNET = "event";
+	//关注
+	public static final String MESSAGE_SUBSCRIBE = "subscribe";
+	//取消关注
+	public static final String MESSAGE_UNSUBSCRIBE = "unsubscribe";
+	//菜单点击
+	public static final String MESSAGE_CLICK = "CLICK";
+	public static final String MESSAGE_VIEW = "VIEW";
+
+	public static final String MESSAGE_SCANCODE= "scancode_push";
 
 	/**
 	 * xml转为map集合
@@ -80,4 +106,32 @@ public class MessageUtil {
 		text.setContent(content);
 		return textMessageToXml(text);
 	}
+
+
+	/**
+	 * 主菜单
+	 * @return
+	 */
+	public static String menuText(){
+		StringBuffer sb = new StringBuffer();
+		sb.append("欢迎您的关注，请按照菜单提示进行操作：\n\n");
+		sb.append("1、公司介绍\n");
+		sb.append("2、产品介绍\n");
+		sb.append("回复？调出此菜单。");
+		return sb.toString();
+	}
+
+	public static String firstMenu(){
+		StringBuffer sb = new StringBuffer();
+		sb.append("公司主要经营...产品，提供...服务，经营理念是...");
+		return sb.toString();
+	}
+
+	public static String secondMenu(){
+		StringBuffer sb = new StringBuffer();
+		sb.append("本产品主要优势是...,针对不同人群有什么....");
+		return sb.toString();
+	}
+
+
 }
