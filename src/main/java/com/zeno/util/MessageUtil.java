@@ -11,6 +11,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.thoughtworks.xstream.XStream;
+import com.zeno.pojo.News;
+import com.zeno.pojo.NewsMessage;
 import com.zeno.pojo.TextMessage;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -107,6 +109,18 @@ public class MessageUtil {
 		return textMessageToXml(text);
 	}
 
+	/**
+	 * 图文消息转为xml
+	 * @param newsMessage
+	 * @return
+	 */
+	public static String newsMessageToXml(NewsMessage newsMessage){
+		XStream xstream = new XStream();
+		xstream.alias("xml", newsMessage.getClass());
+		xstream.alias("item", new News().getClass());
+		return xstream.toXML(newsMessage);
+	}
+
 
 	/**
 	 * 主菜单
@@ -117,6 +131,7 @@ public class MessageUtil {
 		sb.append("欢迎您的关注，请按照菜单提示进行操作：\n\n");
 		sb.append("1、公司介绍\n");
 		sb.append("2、产品介绍\n");
+		sb.append("3、图文信息\n");
 		sb.append("回复？调出此菜单。");
 		return sb.toString();
 	}
@@ -133,5 +148,35 @@ public class MessageUtil {
 		return sb.toString();
 	}
 
+
+	/**
+	 * 图文消息的组装
+	 * @param toUserName
+	 * @param fromUserName
+	 * @return
+	 */
+	public static String initNewsMessage(String toUserName,String fromUserName){
+		String message = null;
+		List<News> newsList = new ArrayList<News>();
+		NewsMessage newsMessage = new NewsMessage();
+
+		News news = new News();
+		news.setTitle("慕课网介绍");
+		news.setDescription("慕课网是垂直的互联网IT技能免费学习网站。以独家视频教程、在线编程工具、学习计划、问答社区为核心特色。在这里，你可以找到最好的互联网技术牛人，也可以通过免费的在线公开视频课程学习国内领先的互联网IT技术。慕课网课程涵盖前端开发、PHP、Html5、Android、iOS、Swift等IT前沿技术语言，包括基础课程、实用案例、高级分享三大类型，适合不同阶段的学习人群。");
+		news.setPicUrl("http://zapper.tunnel.mobi/Weixin/image/imooc.jpg");
+		news.setUrl("www.imooc.com");
+
+		newsList.add(news);
+
+		newsMessage.setToUserName(fromUserName);
+		newsMessage.setFromUserName(toUserName);
+		newsMessage.setCreateTime(System.currentTimeMillis());
+		newsMessage.setMsgType(MESSAGE_NEWS);
+		newsMessage.setArticles(newsList);
+		newsMessage.setArticleCount(newsList.size());
+
+		message = newsMessageToXml(newsMessage);
+		return message;
+	}
 
 }

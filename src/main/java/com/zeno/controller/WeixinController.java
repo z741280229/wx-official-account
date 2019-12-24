@@ -79,7 +79,9 @@ public class WeixinController {
                     message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.firstMenu());
                 }else if("2".equals(content)){
                     message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.secondMenu());
-                }else if("?".equals(content) || "？".equals(content)){
+                }else if ("3".equals(content)){
+                    message = MessageUtil.initNewsMessage(toUserName,fromUserName);
+                } else if("?".equals(content) || "？".equals(content)){
                     message = MessageUtil.initText(toUserName, fromUserName, MessageUtil.menuText());
                 }
             }else if(MessageUtil.MESSAGE_EVNET.equals(msgType)){
