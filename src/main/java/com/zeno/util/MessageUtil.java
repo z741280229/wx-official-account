@@ -11,9 +11,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.thoughtworks.xstream.XStream;
-import com.zeno.pojo.News;
-import com.zeno.pojo.NewsMessage;
-import com.zeno.pojo.TextMessage;
+import com.zeno.pojo.*;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -121,6 +119,28 @@ public class MessageUtil {
 		return xstream.toXML(newsMessage);
 	}
 
+	/**
+	 * 图片消息转为xml
+	 * @param imageMessage
+	 * @return
+	 */
+	public static String imageMessageToXml(ImageMessage imageMessage){
+		XStream xstream = new XStream();
+		xstream.alias("xml", imageMessage.getClass());
+		return xstream.toXML(imageMessage);
+	}
+
+	/**
+	 * 音乐消息转为xml
+	 * @param musicMessage
+	 * @return
+	 */
+	public static String musicMessageToXml(MusicMessage musicMessage){
+		XStream xstream = new XStream();
+		xstream.alias("xml", musicMessage.getClass());
+		return xstream.toXML(musicMessage);
+	}
+
 
 	/**
 	 * 主菜单
@@ -132,6 +152,7 @@ public class MessageUtil {
 		sb.append("1、公司介绍\n");
 		sb.append("2、产品介绍\n");
 		sb.append("3、图文信息\n");
+		sb.append("4、图片信息\n");
 		sb.append("回复？调出此菜单。");
 		return sb.toString();
 	}
@@ -179,4 +200,49 @@ public class MessageUtil {
 		return message;
 	}
 
+	/**
+	 * 组装图片消息
+	 * @param toUserName
+	 * @param fromUserName
+	 * @return
+	 */
+	public static String initImageMessage(String toUserName,String fromUserName){
+		String message = null;
+		Image image = new Image();
+		image.setMediaId("Y3tiRusNpP7GrvG6iZiiRJofNXuzSkz0M_vaIcTPlm89ccrDJGRYOipdyF3UMNNa");
+		ImageMessage imageMessage = new ImageMessage();
+		imageMessage.setFromUserName(toUserName);
+		imageMessage.setToUserName(fromUserName);
+		imageMessage.setMsgType(MESSAGE_IMAGE);
+		imageMessage.setCreateTime(System.currentTimeMillis());
+		imageMessage.setImage(image);
+		message = imageMessageToXml(imageMessage);
+		return message;
+	}
+
+
+	/**
+	 * 组装音乐消息
+	 * @param toUserName
+	 * @param fromUserName
+	 * @return
+	 */
+	public static String initMusicMessage(String toUserName,String fromUserName){
+		String message = null;
+		Music music = new Music();
+		music.setThumbMediaId("Zo9eW-N3twICMkQkfH_jOZ2THw9Q52WG38S8ALFAxN6E-WSyRPRYFxT2qtJd4LC8");
+		music.setTitle("see you again");
+		music.setDescription("速7片尾曲");
+		music.setMusicUrl("http://kvzkgw.natappfree.cc/music/See You Again.mp3");
+		music.setHQMusicUrl("http://kvzkgw.natappfree.cc/music/See You Again.mp3");
+
+		MusicMessage musicMessage = new MusicMessage();
+		musicMessage.setFromUserName(toUserName);
+		musicMessage.setToUserName(fromUserName);
+		musicMessage.setMsgType(MESSAGE_MUSIC);
+		musicMessage.setCreateTime(System.currentTimeMillis());
+		musicMessage.setMusic(music);
+		message = musicMessageToXml(musicMessage);
+		return message;
+	}
 }
