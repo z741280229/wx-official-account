@@ -33,9 +33,11 @@ import java.text.ParseException;
  **/
 public class WeixinUtil {
 
-    private static final String APPID = "wxfdbea2505f5e3239";
+    //录入自身账户的ID
+    private static final String APPID = "";
 
-    private static final String APPSECRET = "ad9ef7b40621562f7a78bbfec267fa8c";
+    //录入自身账户的APPSECRET
+    private static final String APPSECRET = "";
 
     private static final String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
 
