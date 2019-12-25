@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.util.Arrays;
 
 public class CheckUtil {
+	//自定义token，但必须与微信公众号平台对应上
 	private static final String token = "zeno";
 	public static boolean checkSignature(String signature,String timestamp,String nonce){
 		String[] arr = new String[]{token,timestamp,nonce};
