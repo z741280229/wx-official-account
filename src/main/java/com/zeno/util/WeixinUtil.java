@@ -34,20 +34,38 @@ import java.text.ParseException;
 public class WeixinUtil {
 
     //录入自身账户的ID
-    private static final String APPID = "";
+    private static final String APPID = "wxfdbea2505f5e3239";
 
     //录入自身账户的APPSECRET
-    private static final String APPSECRET = "";
+    private static final String APPSECRET = "ad9ef7b40621562f7a78bbfec267fa8c";
 
+    //获取token路径
     private static final String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
 
+    //上传文件路径
     private static final String UPLOAD_URL = "https://api.weixin.qq.com/cgi-bin/media/upload?access_token=ACCESS_TOKEN&type=TYPE";
 
+    //创建菜单路径
     private static final String CREATE_MENU_URL = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN";
 
+    //查询菜单路径
     private static final String QUERY_MENU_URL = "https://api.weixin.qq.com/cgi-bin/menu/get?access_token=ACCESS_TOKEN";
 
+    //删除菜单路径
     private static final String DELETE_MENU_URL = "https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=ACCESS_TOKEN";
+
+    //获取用户列表路径
+    private static final String QUERY_USERS_LIST_URL = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=ACCESS_TOKEN&next_openid=NEXT_OPENID";
+
+    //获取用户基本信息(单个)
+    private static final String QUERY_USER_URL = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=ACCESS_TOKEN&openid=OPENID";
+
+    //批量获取用户信息
+    private static final String QUERY_BATCHGET_USER_URL = "https://api.weixin.qq.com/cgi-bin/user/info/batchget?access_token=ACCESS_TOKEN";
+
+
+
+
 
     /**
      * get请求
@@ -90,7 +108,7 @@ public class WeixinUtil {
     }
 
     /**
-     * 获取accessToken
+     * 获取accessToken(单日请求上限：2000次)
      * @return
      * @throws ParseException
      * @throws IOException
@@ -239,6 +257,14 @@ public class WeixinUtil {
         return menu;
     }
 
+    /**
+     * 创建菜单
+     * @param token
+     * @param menu
+     * @return
+     * @throws ParseException
+     * @throws IOException
+     */
     public static int createMenu(String token,String menu) throws ParseException, IOException{
         int result = 0;
         String url = CREATE_MENU_URL.replace("ACCESS_TOKEN", token);
@@ -249,12 +275,26 @@ public class WeixinUtil {
         return result;
     }
 
+    /**
+     * 查询菜单
+     * @param token
+     * @return
+     * @throws ParseException
+     * @throws IOException
+     */
     public static JSONObject queryMenu(String token) throws ParseException, IOException{
         String url = QUERY_MENU_URL.replace("ACCESS_TOKEN", token);
         JSONObject jsonObject = doGetStr(url);
         return jsonObject;
     }
 
+    /**
+     * 删除菜单
+     * @param token
+     * @return
+     * @throws ParseException
+     * @throws IOException
+     */
     public static int deleteMenu(String token) throws ParseException, IOException{
         String url = DELETE_MENU_URL.replace("ACCESS_TOKEN", token);
         JSONObject jsonObject = doGetStr(url);
@@ -263,6 +303,75 @@ public class WeixinUtil {
             result = jsonObject.getInteger("errcode");
         }
         return result;
+    }
+
+
+    /**
+     * 获取用户列表（单日请求上线：500次）
+     * 关注者数量超过10000时
+     * 当公众号关注者数量超过10000时，可通过填写next_openid的值，从而多次拉取列表的方式来满足需求。
+     * 具体而言，就是在调用接口时，将上一次调用得到的返回中的next_openid值，作为下一次调用中的next_openid
+     * @param token
+     * @return
+     * @throws IOException
+     * @throws ParseException
+     */
+    public static JSONObject getUserList(String token,String nextOpenid) throws IOException, ParseException {
+        String url = null;
+        if (nextOpenid == null){
+            url = QUERY_USERS_LIST_URL.replace("ACCESS_TOKEN", token).replace("NEXT_OPENID","");
+        }else{
+            url = QUERY_USERS_LIST_URL.replace("ACCESS_TOKEN", token).replace("NEXT_OPENID",nextOpenid);
+        }
+        JSONObject jsonObject = doGetStr(url);
+        if (jsonObject != null){
+            return jsonObject;
+        }else {
+            return doGetStr(url);
+        }
+    }
+
+
+    /**
+     * 获取用户基本信息(单个，单日请求上线：500000次，注：与批量请求共500000次)
+     *
+     * 开发者可通过OpenID来获取用户基本信息。特别需要注意的是，如果开发者拥有多个移动应用、网站应用和公众帐号，
+     * 可通过获取用户基本信息中的unionid来区分用户的唯一性，因为只要是同一个微信开放平台帐号下的移动应用、网站应用和公众帐号，
+     * 用户的unionid是唯一的。换句话说，同一用户，对同一个微信开放平台下的不同应用，unionid是相同的。
+     * @param token
+     * @param openId
+     * @return
+     * @throws IOException
+     * @throws ParseException
+     */
+    public static JSONObject getUserInfoByOpenId(String token,String openId) throws IOException, ParseException {
+        String url = QUERY_USER_URL.replace("ACCESS_TOKEN",token).replace("OPENID",openId);
+        JSONObject jsonObject = doGetStr(url);
+        if (jsonObject != null){
+            return jsonObject;
+        }else {
+            return doGetStr(url);
+        }
+    }
+
+
+    /**
+     * 批量获取用户信息（每次最多获取一百条，单日请求上线：500000次，与单个请求共500000次）
+     *
+     * @param token
+     * @param userOpenIds
+     * @return
+     * @throws IOException
+     * @throws ParseException
+     */
+    public static JSONObject getUsersInfo(String token,String userOpenIds) throws IOException, ParseException {
+        String url = QUERY_BATCHGET_USER_URL.replace("ACCESS_TOKEN",token);
+        JSONObject jsonObject = doPostStr(url, userOpenIds);
+        if (jsonObject != null){
+            return jsonObject;
+        }else {
+            return doPostStr(url, userOpenIds);
+        }
     }
 
 }

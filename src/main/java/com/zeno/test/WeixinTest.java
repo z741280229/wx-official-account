@@ -2,10 +2,14 @@ package com.zeno.test;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zeno.pojo.AccessToken;
+import com.zeno.pojo.OpenId;
+import com.zeno.pojo.OpenIds;
 import com.zeno.util.WeixinUtil;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @program: wx-official-account
@@ -15,11 +19,17 @@ import java.text.ParseException;
  **/
 public class WeixinTest {
     public static void main(String[] args) {
-        AccessToken token = null;
+        AccessToken token = new AccessToken();
         try {
-            token = WeixinUtil.getAccessToken();
+            //token = WeixinUtil.getAccessToken();
+
+            token.setToken("28_t5IRsXky_bn9FNg28_WeJXf17Z5__4trV_xp8FbtDHN99EaFf77RSxTVsMDi2L_YWygGtFce4uCmv6xkyx09gH597guia-dKq6RNkPZOtConIf3HzIy4XVGSycW6UTclx6BioAQLeJTic3NuDXHeAEAPJT");
+            token.setExpiresIn(7200);
+
             System.out.println("票据"+token.getToken());
             System.out.println("有效时间"+token.getExpiresIn());
+
+
 
             /*String path = "C:/Users/Ethan/Desktop/30-1P613192038.jpg";
             String mediaId = WeixinUtil.upload(path, token.getToken(), "thumb");
@@ -31,14 +41,42 @@ public class WeixinTest {
             }else{
                 System.out.println("错误码：" + result);
             }*/
+
            /*JSONObject jsonObject =  WeixinUtil.queryMenu(token.getToken());
            System.out.println(jsonObject);*/
-           int result = WeixinUtil.deleteMenu(token.getToken());
+
+
+           /*int result = WeixinUtil.deleteMenu(token.getToken());
            if (result == 0){
                System.out.println("菜单删除成功");
            }else {
                System.out.println("菜单删除失败");
-           }
+           }*/
+
+            /*JSONObject userList = WeixinUtil.getUserList(token.getToken(),null);
+            System.out.println(userList);*/
+
+            /*JSONObject jsonObject = WeixinUtil.getUserInfoByOpenId(token.getToken(), "o8nzI0XTOHUXIiQsVdcVhw40XKp4");
+            System.out.println(jsonObject);*/
+
+            List<OpenId> openIds = new ArrayList<>();
+            OpenId openId1 = new OpenId("o8nzI0XTOHUXIiQsVdcVhw40XKp4","zh_CN");
+            OpenId openId2 = new OpenId("o8nzI0QsSm5FqaB9j5JFC7GIGN9s","zh_CN");
+            OpenId openId3 = new OpenId("o8nzI0RdBgleleG_I16CD-1R1OR0","zh_CN");
+            OpenId openId4 = new OpenId("o8nzI0UX5odoaFnaJ_kjXopmIEHA","zh_CN");
+            OpenId openId5 = new OpenId("o8nzI0fg4QqcsBUg00vofp4JTBhI","zh_CN");
+            openIds.add(openId1);
+            openIds.add(openId2);
+            openIds.add(openId3);
+            openIds.add(openId4);
+            openIds.add(openId5);
+            OpenIds openIdsList = new OpenIds();
+            openIdsList.setUser_list(openIds);
+            String ops = JSONObject.toJSONString(openIdsList);
+            JSONObject userList = WeixinUtil.getUsersInfo(token.getToken(), ops);
+            System.out.println(userList);
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
