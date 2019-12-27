@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.zeno.pojo.AccessToken;
 import com.zeno.pojo.OpenId;
 import com.zeno.pojo.OpenIds;
+import com.zeno.push.MessagePush;
 import com.zeno.util.WeixinUtil;
 
 import java.io.IOException;
@@ -21,19 +22,20 @@ public class WeixinTest {
     public static void main(String[] args) {
         AccessToken token = new AccessToken();
         try {
-            //token = WeixinUtil.getAccessToken();
+            token = WeixinUtil.getAccessToken();
 
-            token.setToken("28_t5IRsXky_bn9FNg28_WeJXf17Z5__4trV_xp8FbtDHN99EaFf77RSxTVsMDi2L_YWygGtFce4uCmv6xkyx09gH597guia-dKq6RNkPZOtConIf3HzIy4XVGSycW6UTclx6BioAQLeJTic3NuDXHeAEAPJT");
-            token.setExpiresIn(7200);
+            /*token.setToken("28_aVaZe447lHs4b_3ldJZSj_aPdEKh_Y9cdRCpHpDqjeCTyacaQwwUDBB-ybYaAR4ZXaHUQEp8Hj_76z3DgdOFa-l7ydSNQPKbnxyVIrSDcdXlX1SlxcXx04tkdoPEG_qqyFmKL9wghriexthYYXRfAGAEDX");
+            token.setExpiresIn(7200);*/
 
-            System.out.println("票据"+token.getToken());
-            System.out.println("有效时间"+token.getExpiresIn());
+            /*System.out.println("票据"+token.getToken());
+            System.out.println("有效时间"+token.getExpiresIn());*/
 
 
 
-            /*String path = "C:/Users/Ethan/Desktop/30-1P613192038.jpg";
-            String mediaId = WeixinUtil.upload(path, token.getToken(), "thumb");
+           /* String path = "C:/Users/Ethan/Desktop/51b156b1b8aeb.jpg";
+            String mediaId = WeixinUtil.upload(path, token.getToken(), "image");
             System.out.println(mediaId);*/
+
             /*String meun = JSONObject.toJSONString(WeixinUtil.initMenu());
             int result = WeixinUtil.createMenu(token.getToken(),meun);
             if (result == 0){
@@ -59,7 +61,7 @@ public class WeixinTest {
             /*JSONObject jsonObject = WeixinUtil.getUserInfoByOpenId(token.getToken(), "o8nzI0XTOHUXIiQsVdcVhw40XKp4");
             System.out.println(jsonObject);*/
 
-            List<OpenId> openIds = new ArrayList<>();
+           /* List<OpenId> openIds = new ArrayList<>();
             OpenId openId1 = new OpenId("o8nzI0XTOHUXIiQsVdcVhw40XKp4","zh_CN");
             OpenId openId2 = new OpenId("o8nzI0QsSm5FqaB9j5JFC7GIGN9s","zh_CN");
             OpenId openId3 = new OpenId("o8nzI0RdBgleleG_I16CD-1R1OR0","zh_CN");
@@ -74,7 +76,11 @@ public class WeixinTest {
             openIdsList.setUser_list(openIds);
             String ops = JSONObject.toJSONString(openIdsList);
             JSONObject userList = WeixinUtil.getUsersInfo(token.getToken(), ops);
-            System.out.println(userList);
+            System.out.println(userList);*/
+
+            /*String path = "C:/Users/Ethan/Desktop/30-1P613192038.jpg";
+            String url = MessagePush.getPicUrl(path,token.getToken(),"thumb");
+            System.out.println(url);*/
 
 
         } catch (Exception e) {

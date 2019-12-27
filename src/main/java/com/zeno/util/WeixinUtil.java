@@ -43,7 +43,7 @@ public class WeixinUtil {
     private static final String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
 
     //上传文件路径
-    private static final String UPLOAD_URL = "https://api.weixin.qq.com/cgi-bin/media/upload?access_token=ACCESS_TOKEN&type=TYPE";
+    public static final String UPLOAD_URL = "https://api.weixin.qq.com/cgi-bin/media/upload?access_token=ACCESS_TOKEN&type=TYPE";
 
     //创建菜单路径
     private static final String CREATE_MENU_URL = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN";
@@ -126,23 +126,23 @@ public class WeixinUtil {
 
     /**
      * 文件上传
-     * @param filePath
-     * @param accessToken
-     * @param type
+     * @param filePath  文件路径
+     * @param accessToken  微信票据
+     * @param type  文件类型
      * @return
      * @throws IOException
      * @throws NoSuchAlgorithmException
      * @throws NoSuchProviderException
      * @throws KeyManagementException
      */
-    public static String upload(String filePath, String accessToken,String type) throws IOException, NoSuchAlgorithmException, NoSuchProviderException, KeyManagementException {
-        File file = new File(filePath);
+    public static String upload(String accessToken,String type,File file) throws IOException, NoSuchAlgorithmException, NoSuchProviderException, KeyManagementException {
+        //File file = new File(filePath);
         if (!file.exists() || !file.isFile()) {
             throw new IOException("文件不存在");
         }
-
+        System.out.println(file.length());
         String url = UPLOAD_URL.replace("ACCESS_TOKEN", accessToken).replace("TYPE",type);
-
+        ///String url = requestUrl.replace("ACCESS_TOKEN", accessToken).replace("TYPE",type);
         URL urlObj = new URL(url);
         //连接
         HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();

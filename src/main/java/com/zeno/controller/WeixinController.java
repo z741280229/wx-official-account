@@ -1,16 +1,22 @@
 package com.zeno.controller;
 
+import ch.qos.logback.core.util.FileUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.zeno.pojo.TextMessage;
 import com.zeno.util.CheckUtil;
 import com.zeno.util.MessageUtil;
+import com.zeno.util.MultipartFileToFile;
+import com.zeno.util.WeixinUtil;
 import org.dom4j.DocumentException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Map;
 
@@ -112,7 +118,15 @@ public class WeixinController {
         }finally {
             out.close();
         }
-
-
     }
+
+    @PostMapping("getPicUrl")
+    @ResponseBody
+    public String getPicUrl(@RequestParam("file") MultipartFile multfile,@RequestParam("access_token") String token) throws Exception {
+        File file = MultipartFileToFile.multipartFileToFile(multfile);
+        String thumb = WeixinUtil.upload(token, "image", file);
+        MultipartFileToFile.delteTempFile(file);
+        return thumb;
+    }
+
 }

@@ -49,6 +49,7 @@ public class MessageUtil {
 	public static final String MESSAGE_UNSUBSCRIBE = "unsubscribe";
 	//菜单点击
 	public static final String MESSAGE_CLICK = "CLICK";
+
 	public static final String MESSAGE_VIEW = "VIEW";
 
 	public static final String MESSAGE_SCANCODE= "scancode_push";
@@ -153,6 +154,7 @@ public class MessageUtil {
 		sb.append("2、产品介绍\n");
 		sb.append("3、图文信息\n");
 		sb.append("4、图片信息\n");
+		sb.append("5、媒体信息\n");
 		sb.append("回复？调出此菜单。");
 		return sb.toString();
 	}
@@ -209,7 +211,7 @@ public class MessageUtil {
 	public static String initImageMessage(String toUserName,String fromUserName){
 		String message = null;
 		Image image = new Image();
-		image.setMediaId("Y3tiRusNpP7GrvG6iZiiRJofNXuzSkz0M_vaIcTPlm89ccrDJGRYOipdyF3UMNNa");
+		image.setMediaId("h-qR4tHrFekDdQwta5j2dpgfbPlYLtn2Pjz_e2la8fUB8Pe2YfMV-qw6yPB5fGML");
 		ImageMessage imageMessage = new ImageMessage();
 		imageMessage.setFromUserName(toUserName);
 		imageMessage.setToUserName(fromUserName);
