@@ -126,24 +126,21 @@ public class WeixinUtil {
 
     /**
      * 文件上传
-     * @param filePath  文件路径
-     * @param accessToken  微信票据
-     * @param type  文件类型
+     * @param reqUrl  文件路径
      * @return
      * @throws IOException
      * @throws NoSuchAlgorithmException
      * @throws NoSuchProviderException
      * @throws KeyManagementException
      */
-    public static String upload(String accessToken,String type,File file) throws IOException, NoSuchAlgorithmException, NoSuchProviderException, KeyManagementException {
+    public static JSONObject upload(File file,String reqUrl) throws IOException, NoSuchAlgorithmException, NoSuchProviderException, KeyManagementException {
         //File file = new File(filePath);
         if (!file.exists() || !file.isFile()) {
             throw new IOException("文件不存在");
         }
-        System.out.println(file.length());
-        String url = UPLOAD_URL.replace("ACCESS_TOKEN", accessToken).replace("TYPE",type);
+        //String url = reqUrl.replace("ACCESS_TOKEN", accessToken).replace("TYPE",type);
         ///String url = requestUrl.replace("ACCESS_TOKEN", accessToken).replace("TYPE",type);
-        URL urlObj = new URL(url);
+        URL urlObj = new URL(reqUrl);
         //连接
         HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();
 
@@ -214,13 +211,14 @@ public class WeixinUtil {
         }
 
         JSONObject jsonObj = JSONObject.parseObject(result);
-        System.out.println(jsonObj);
+        return jsonObj;
+        /*System.out.println(jsonObj);
         String typeName = "media_id";
         if(!"image".equals(type)){
             typeName = type + "_media_id";
         }
         String mediaId = jsonObj.getString(typeName);
-        return mediaId;
+        return mediaId;*/
     }
 
     /**
@@ -372,6 +370,17 @@ public class WeixinUtil {
         }else {
             return doPostStr(url, userOpenIds);
         }
+    }
+
+
+    /**
+     * 替换token
+     * @param url
+     * @param token
+     * @return
+     */
+    public static String replaceToken(String url,String token){
+        return url.replace("ACCESS_TOKEN",token);
     }
 
 }

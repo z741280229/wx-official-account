@@ -24,8 +24,8 @@ public class WeixinTest {
         try {
             token = WeixinUtil.getAccessToken();
 
-            /*token.setToken("28_aVaZe447lHs4b_3ldJZSj_aPdEKh_Y9cdRCpHpDqjeCTyacaQwwUDBB-ybYaAR4ZXaHUQEp8Hj_76z3DgdOFa-l7ydSNQPKbnxyVIrSDcdXlX1SlxcXx04tkdoPEG_qqyFmKL9wghriexthYYXRfAGAEDX");
-            token.setExpiresIn(7200);*/
+            token.setToken("28_R3yU39WNUDLUK0adUgsAuyKVgTGdEeqbneBZu-P5PhU2d6UbUNli2kCQSXPR3RltosGVUmN0j4u0W6a9TtrLFGedW-OobFYAnrv4_W6II13OU3LUdqjbTqBT6JHkkN6HMRYMTGk3vUOe_99zYKBdABAHTK");
+            token.setExpiresIn(7200);
 
             /*System.out.println("票据"+token.getToken());
             System.out.println("有效时间"+token.getExpiresIn());*/

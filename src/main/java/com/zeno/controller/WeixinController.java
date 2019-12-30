@@ -8,6 +8,7 @@ import com.zeno.util.MessageUtil;
 import com.zeno.util.MultipartFileToFile;
 import com.zeno.util.WeixinUtil;
 import org.dom4j.DocumentException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -18,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.text.ParseException;
 import java.util.Map;
 
 /**
@@ -28,6 +30,10 @@ import java.util.Map;
  **/
 @RestController
 public class WeixinController {
+
+
+    @Value("${wx-office-account-token}")
+    private String token;
 
     /**
      * 与微信建立连接
@@ -111,8 +117,8 @@ public class WeixinController {
                 String label = map.get("Label");
                 message = MessageUtil.initText(toUserName, fromUserName, label);
             }
-            System.out.println(message);
-            out.print(message);
+            //System.out.println(message);
+            //out.print(message);
         } catch (IOException | DocumentException  e ) {
             e.printStackTrace();
         }finally {
@@ -120,13 +126,87 @@ public class WeixinController {
         }
     }
 
+
+    /**
+     * 上传图片并获取
+     * @param multfile
+     * @return
+     * @throws Exception
+     */
     @PostMapping("getPicUrl")
     @ResponseBody
-    public String getPicUrl(@RequestParam("file") MultipartFile multfile,@RequestParam("access_token") String token) throws Exception {
+    public String getPicUrl(@RequestParam("file") MultipartFile multfile,@RequestParam("type")String type) throws Exception {
         File file = MultipartFileToFile.multipartFileToFile(multfile);
-        String thumb = WeixinUtil.upload(token, "image", file);
+
+        String url = WeixinUtil.UPLOAD_URL.replace("ACCESS_TOKEN", token).replace("TYPE",type);
+        JSONObject jsonObject = WeixinUtil.upload(file,url);
+        String typeName = "media_id";
+        if(!"image".equals(type)){
+            typeName = type + "_media_id";
+        }
+        String mediaId = jsonObject.getString(typeName);
         MultipartFileToFile.delteTempFile(file);
-        return thumb;
+        return mediaId;
     }
+
+
+    /**
+     * 上传图文消息内的图片获取URL【订阅号与服务号认证后均可用】
+     * 请注意，本接口所上传的图片不占用公众号的素材库中图片数量的5000个的限制。图片仅支持jpg/png格式，大小必须在1MB以下。
+     * @param multfile
+     * @return
+     */
+    @PostMapping("media/uploadimg")
+    public JSONObject uploading(@RequestParam("file") MultipartFile multfile){
+        File file = null;
+        try {
+            file = MultipartFileToFile.multipartFileToFile(multfile);
+            String url = WeixinUtil.replaceToken("https://api.weixin.qq.com/cgi-bin/media/uploadimg?access_token=ACCESS_TOKEN", this.token);
+            JSONObject jsonObject = WeixinUtil.upload(file, url);
+            MultipartFileToFile.delteTempFile(file);
+            return jsonObject;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+    /**
+     * 上传图文消息素材【订阅号与服务号认证后均可用】
+     * @param jsonObject
+     * @return
+     */
+    @PostMapping("media/uploadnews")
+    public JSONObject uploadNews(@RequestBody JSONObject jsonObject){
+        String url = WeixinUtil.replaceToken("https://api.weixin.qq.com/cgi-bin/media/uploadnews?access_token=ACCESS_TOKEN", token);
+        try {
+            return WeixinUtil.doPostStr(url, JSONObject.toJSONString(jsonObject));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 根据OpenID列表群发【订阅号不可用，服务号认证后可用】
+     * @param jsonObject
+     * @return
+     */
+    @PostMapping("/message/mass/send")
+    public JSONObject sendMessage(@RequestBody JSONObject jsonObject){
+        String url = WeixinUtil.replaceToken("https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=ACCESS_TOKEN",token);
+        try {
+            return  WeixinUtil.doPostStr(url, JSONObject.toJSONString(jsonObject));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 }
