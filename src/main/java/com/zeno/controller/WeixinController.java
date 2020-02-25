@@ -78,6 +78,13 @@ public class WeixinController {
             //请求方（关注公众号账号）
             String fromUserName = map.get("FromUserName");
 
+            String Ticket = map.get("Ticket");
+
+            //获取用户信息
+            JSONObject userInfoByOpenId = WeixinUtil.getUserInfoByOpenId(token, fromUserName);
+            System.out.println(Ticket);
+            System.out.println(userInfoByOpenId);
+
             //被请求方（公众号服务端）
             String toUserName = map.get("ToUserName");
             String msgType = map.get("MsgType");
@@ -117,13 +124,14 @@ public class WeixinController {
                 String label = map.get("Label");
                 message = MessageUtil.initText(toUserName, fromUserName, label);
             }
-            //System.out.println(message);
-            //out.print(message);
-        } catch (IOException | DocumentException  e ) {
+            System.out.println(message);
+            out.print(message);
+        } catch (IOException | DocumentException | ParseException e ) {
             e.printStackTrace();
         }finally {
             out.close();
         }
+
     }
 
 
@@ -200,6 +208,19 @@ public class WeixinController {
         String url = WeixinUtil.replaceToken("https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=ACCESS_TOKEN",token);
         try {
             return  WeixinUtil.doPostStr(url, JSONObject.toJSONString(jsonObject));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @PostMapping("/cgi-bin/tags/create")
+    public JSONObject createTag(@RequestBody JSONObject jsonObject){
+        String url = WeixinUtil.replaceToken("https://api.weixin.qq.com/cgi-bin/tags/create?access_token=ACCESS_TOKEN",token);
+        try {
+            return WeixinUtil.doPostStr(url,JSONObject.toJSONString(jsonObject));
         } catch (ParseException e) {
             e.printStackTrace();
         } catch (IOException e) {

@@ -24,6 +24,8 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.text.ParseException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @program: wx-official-account
@@ -62,6 +64,8 @@ public class WeixinUtil {
 
     //批量获取用户信息
     private static final String QUERY_BATCHGET_USER_URL = "https://api.weixin.qq.com/cgi-bin/user/info/batchget?access_token=ACCESS_TOKEN";
+
+    private static final String CREATE_TAG_URL = "https://api.weixin.qq.com/cgi-bin/tags/create?access_token=ACCESS_TOKEN";
 
 
 
@@ -382,5 +386,6 @@ public class WeixinUtil {
     public static String replaceToken(String url,String token){
         return url.replace("ACCESS_TOKEN",token);
     }
+
 
 }

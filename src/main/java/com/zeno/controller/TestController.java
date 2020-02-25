@@ -1,7 +1,12 @@
 package com.zeno.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.alibaba.fastjson.JSONObject;
+import com.zeno.util.WeixinUtil;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * @program: wx-official-account
@@ -11,8 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @RestController
 public class TestController {
-    @GetMapping("test")
-    public String test(String parameter){
-        return parameter;
-    }
+    // 临时二维码
+    private final static String QR_SCENE = "QR_SCENE";
+    // 永久二维码
+    private final static String QR_LIMIT_SCENE = "QR_LIMIT_SCENE";
+    // 永久二维码(字符串)
+    private final static String QR_LIMIT_STR_SCENE = "QR_LIMIT_STR_SCENE";
+    // 创建二维码
+    private String create_ticket_path = "https://api.weixin.qq.com/cgi-bin/qrcode/create";
+    // 通过ticket换取二维码
+    private String showqrcode_path = "https://mp.weixin.qq.com/cgi-bin/showqrcode";
+
+
 }
