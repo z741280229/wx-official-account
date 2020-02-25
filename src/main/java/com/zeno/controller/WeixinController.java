@@ -78,11 +78,16 @@ public class WeixinController {
             //请求方（关注公众号账号）
             String fromUserName = map.get("FromUserName");
 
+            //获取二维码票据
             String Ticket = map.get("Ticket");
+
+            //获取二维码生成传入的场景值
+            String eventKey = map.get("EventKey");
 
             //获取用户信息
             JSONObject userInfoByOpenId = WeixinUtil.getUserInfoByOpenId(token, fromUserName);
             System.out.println(Ticket);
+            System.out.println(eventKey);
             System.out.println(userInfoByOpenId);
 
             //被请求方（公众号服务端）
